@@ -1,18 +1,23 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View, StatusBar } from "react-native";
+import Navigator from "./src/navigation/Navigator";
 
-//delete later
-import { Image, Button, TextInput, TouchableOpacity } from 'react-native';
+let statusBarHeight = StatusBar.currentHeight;
 
-export default function App() {
-  function LoginHandler() {
-    console.log("Handle login events and sht")
-  }
-
+function App() {
   return (
-    <View></View>
+    <View style={styles.container}>
+      <Navigator />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    marginTop: statusBarHeight
+  }
 });
+
+export default App;

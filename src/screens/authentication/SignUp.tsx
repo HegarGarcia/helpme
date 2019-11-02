@@ -3,7 +3,7 @@ import { Text, ImageBackground } from "react-native";
 
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
-import GoogleSignInButton from "../../components/GoogleSignInButton";
+import GoogleAuthButton from "../../components/GoogleAuthButton";
 
 import { Colors } from "../../styles/base";
 import styles from "./styles";
@@ -42,7 +42,7 @@ const SignUpScreen: FC<any> = props => {
         onPress={() => props.navigation.navigate("SignIn")}
       />
 
-      <GoogleSignInButton title='Sign Up with Google' onPress={() => {}} />
+      <GoogleAuthButton title='Sign Up with Google' onPress={() => {}} />
     </ImageBackground>
   );
 };

@@ -4,7 +4,7 @@ import { NavigationScreenProp } from "react-navigation";
 
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
-import GoogleSignInButton from "../../components/GoogleSignInButton";
+import GoogleAuthButton from "../../components/GoogleAuthButton";
 
 import { Colors } from "../../styles/base";
 import styles from "./styles";
@@ -45,7 +45,7 @@ const SignInScreen: FC<LoginScreenProps> = props => {
         onPress={() => props.navigation.navigate("SignUp")}
       />
 
-      <GoogleSignInButton title='Sign In with Google' onPress={() => {}} />
+      <GoogleAuthButton title='Sign In with Google' onPress={() => {}} />
     </ImageBackground>
   );
 };

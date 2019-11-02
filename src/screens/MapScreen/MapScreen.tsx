@@ -4,8 +4,6 @@ import { Marker } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions, Button, TextInput } from 'react-native';
 import { FAB, Provider as PaperProvider, Dialog, Portal, Paragraph } from 'react-native-paper';
 
-import RegisterMarker from "./MarkerRegister";
-
 export default function MapScreen() {
     const [markers, setMarkers] = useState([])
     const [isVisible, setVisible] = useState(false)

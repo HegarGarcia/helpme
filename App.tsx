@@ -1,10 +1,13 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View, StatusBar } from "react-native";
+import Navigator from "./src/navigation/Navigator";
 
-export default function App() {
+let statusBarHeight = StatusBar.currentHeight;
+
+function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+      <Navigator />
     </View>
   );
 }
@@ -12,8 +15,9 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    backgroundColor: "#fff",
+    marginTop: statusBarHeight
+  }
 });
+
+export default App;

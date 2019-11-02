@@ -1,5 +1,3 @@
-import * as firebase from "firebase";
-
 const config = {
   apiKey: "AIzaSyCzmzCNtjalVy9ip1aVtQOELu5qf7OeXss",
   authDomain: "thisdot-help-me.firebaseapp.com",
@@ -11,7 +9,4 @@ const config = {
   measurementId: "G-CQNHFFJ6QJ"
 };
 
-export const firebaseApp = firebase.initializeApp(config);
-
-export const auth = firebase.auth();
-export const firestore = firebase.firestore();
+export default config;

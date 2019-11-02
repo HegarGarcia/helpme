@@ -9,13 +9,19 @@ interface EmailAndPassword {
 
 export const signUpWithEmailAndPassword = async ({
   email,
-  password
-}: EmailAndPassword) =>
-  await auth()
+  password,
+  username
+}: EmailAndPassword) => {
+  const user = await auth()
     .createUserWithEmailAndPassword(email, password)
     .catch(err =>
-      Alert.alert("Error", `Problema en inicio de sesión: ${err.message}`)
+      Alert.alert("Problema en la Creación de Cuenta", err.message)
     );
+
+  if (user) {
+    await user.user.updateProfile({ displayName: username });
+  }
+};
 
 export const signInWithEmailAndPassword = async ({
   email,

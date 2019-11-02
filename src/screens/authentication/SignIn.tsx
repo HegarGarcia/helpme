@@ -9,7 +9,7 @@ import GoogleAuthButton from "../../components/GoogleAuthButton";
 import { Colors } from "../../styles/base";
 import styles from "./styles";
 
-const BackgroundImage = require("../../../assets/help_hands.jpg");
+const BackgroundImage = require("../../../assets/images/help_hands.jpg");
 
 interface LoginScreenProps {
   navigation: NavigationScreenProp<any, any>;

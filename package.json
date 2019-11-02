@@ -23,5 +23,8 @@
     "babel-preset-expo": "^7.1.0",
     "typescript": "^3.6.3"
   },
+  "jest": {
+    "preset": "react-native"
+  },
   "private": true
 }

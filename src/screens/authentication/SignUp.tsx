@@ -1,9 +1,10 @@
 import React, { FC, useState } from "react";
 import { Text, ImageBackground } from "react-native";
 
+import { signUpWithEmailAndPassword } from "../../authentication/authenticateWithEmailAndPassword";
+
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
-import GoogleAuthButton from "../../components/GoogleAuthButton";
 
 import { Colors } from "../../styles/base";
 import styles from "./styles";
@@ -33,7 +34,9 @@ const SignUpScreen: FC<any> = props => {
       <Button
         title='Registrarme'
         backgroundColor={Colors.secondaryLigth}
-        onPress={() => {}}
+        onPress={() =>
+          signUpWithEmailAndPassword({ email, password, username })
+        }
       />
 
       <Button
@@ -41,8 +44,6 @@ const SignUpScreen: FC<any> = props => {
         backgroundColor={Colors.secondaryLigth}
         onPress={() => props.navigation.navigate("SignIn")}
       />
-
-      <GoogleAuthButton title='Sign Up with Google' onPress={() => {}} />
     </ImageBackground>
   );
 };

@@ -12,13 +12,26 @@ const AuthStack = createStackNavigator(
   { headerMode: "none" }
 );
 
-export default createAppContainer(
+const AppStack = createStackNavigator({}, { headerMode: "none" });
+
+export const AuthNavigator = createAppContainer(
   createSwitchNavigator(
     {
       Auth: AuthStack
     },
     {
       initialRouteName: "Auth"
+    }
+  )
+);
+
+export const AppNavigator = createAppContainer(
+  createSwitchNavigator(
+    {
+      App: AppStack
+    },
+    {
+      initialRouteName: "App"
     }
   )
 );

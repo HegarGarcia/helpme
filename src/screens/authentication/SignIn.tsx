@@ -2,9 +2,10 @@ import React, { FC, useState } from "react";
 import { Text, ImageBackground } from "react-native";
 import { NavigationScreenProp } from "react-navigation";
 
+import { signInWithEmailAndPassword } from "../../authentication/authenticateWithEmailAndPassword";
+
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
-import GoogleAuthButton from "../../components/GoogleAuthButton";
 
 import { Colors } from "../../styles/base";
 import styles from "./styles";
@@ -18,6 +19,9 @@ interface LoginScreenProps {
 const SignInScreen: FC<LoginScreenProps> = props => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const signIn = () => signInWithEmailAndPassword({ email, password });
+  const navigateToSignUp = () => props.navigation.navigate("SignUp");
 
   return (
     <ImageBackground
@@ -36,16 +40,14 @@ const SignInScreen: FC<LoginScreenProps> = props => {
       <Button
         title='Iniciar Sesión'
         backgroundColor={Colors.secondaryLigth}
-        onPress={() => {}}
+        onPress={signIn}
       />
 
       <Button
         title='Registrarme como filántropo'
         backgroundColor={Colors.secondaryLigth}
-        onPress={() => props.navigation.navigate("SignUp")}
+        onPress={navigateToSignUp}
       />
-
-      <GoogleAuthButton title='Sign In with Google' onPress={() => {}} />
     </ImageBackground>
   );
 };

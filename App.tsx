@@ -1,47 +1,23 @@
-import React, { useState } from "react";
-import { AppLoading } from "expo";
-import { Asset } from "expo-asset";
-import { StyleSheet, View, StatusBar } from "react-native";
-import Navigator from "./src/navigation/Navigator";
+import React, { useEffect } from "react";
+import { UserProvider } from "./src/authentication/userContext";
 
-let statusBarHeight = StatusBar.currentHeight;
+import firebaseConfig from "./src/config/firebase";
+import { apps, initializeApp } from "firebase";
 
-const App = props => {
-  const [isLoadingComplete, setLoadingComplete] = useState(false);
+import Main from "./src/screens/Main";
 
-  return !isLoadingComplete && !props.skipLoadingScreen ? (
-    <AppLoading
-      startAsync={loadResourcesAsync}
-      onError={handleLoadingError}
-      onFinish={() => handleFinishLoading(setLoadingComplete)}
-    />
-  ) : (
-    <View style={styles.container}>
-      <Navigator />
-    </View>
+const App = () => {
+  useEffect(() => {
+    if (apps.length <= 0) {
+      initializeApp(firebaseConfig);
+    }
+  }, []);
+
+  return (
+    <UserProvider>
+      <Main />
+    </UserProvider>
   );
 };
-
-async function loadResourcesAsync() {
-  await Promise.all([
-    Asset.loadAsync([require("./assets/images/help_hands.jpg")])
-  ]);
-}
-
-function handleLoadingError(error) {
-  console.warn(error);
-}
-
-function handleFinishLoading(setLoadingComplete) {
-  setLoadingComplete(true);
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    marginTop: statusBarHeight
-  }
-});
 
 export default App;

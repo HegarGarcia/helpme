@@ -26,13 +26,18 @@ const AddMarkerDialog: FC<AddMarkerDialogProps> = ({
   toggleVisibility,
   currentLocation
 }) => {
-  const [needy, setNeedy] = useState("");
-  const [necessity, setNecessity] = useState("");
-  const [details, setDetails] = useState("");
-  const [references, setReferences] = useState("");
+  const [needy, setNeedy] = useState("homeless");
+  const [necessity, setNecessity] = useState("food");
+  const [details, setDetails] = useState(null);
+  const [references, setReferences] = useState(null);
   const { user } = useContext(UserContext);
 
   const addMarker = () => {
+    if (!(needy && necessity)) {
+      alert("Son requeridos quién y qué necesita");
+      return;
+    }
+
     const marker: IMarker = {
       attended: false,
       details,
@@ -52,7 +57,7 @@ const AddMarkerDialog: FC<AddMarkerDialogProps> = ({
       <Dialog visible onDismiss={toggleVisibility}>
         <Dialog.Title>¿A quien quieres ayudar?</Dialog.Title>
         <Dialog.Content>
-          <Paragraph>¿Quién lo necesita?</Paragraph>
+          <Paragraph>¿Quién lo necesita? (Requerido)</Paragraph>
           <Picker
             style={styles.picker}
             selectedValue={needy}
@@ -62,17 +67,17 @@ const AddMarkerDialog: FC<AddMarkerDialogProps> = ({
             <Picker.Item label='Persona de la tercera edad' value='elder' />
           </Picker>
 
-          <Paragraph>¿Qué se necesita?</Paragraph>
+          <Paragraph>¿Qué se necesita? (Requerido)</Paragraph>
           <Picker
             style={styles.picker}
             selectedValue={necessity}
             onValueChange={setNecessity}>
-            <Picker.Item label='Comida' value='Comida' />
-            <Picker.Item label='Agua' value='Agua' />
-            <Picker.Item label='Atencion Medica' value='Atencion Medica' />
-            <Picker.Item label='Ropa' value='Ropa' />
-            <Picker.Item label='Zapatos' value='Zapatos' />
-            <Picker.Item label='Dinero' value='Dinero' />
+            <Picker.Item label='Comida' value='food' />
+            <Picker.Item label='Agua' value='water' />
+            <Picker.Item label='Atencion Medica' value='medic_assistance' />
+            <Picker.Item label='Ropa' value='clothes' />
+            <Picker.Item label='Zapatos' value='shoes' />
+            <Picker.Item label='Dinero' value='money' />
           </Picker>
 
           <TextInput

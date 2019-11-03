@@ -9,7 +9,12 @@ import AddMarkerDialog from "../components/AddMarkerDialog";
 import MarkerDetailDialog from "../components/MarkerDetailDialog";
 import ProfileDetailDialog from "../components/ProfileDetailDialog";
 
-import Markers, { IMarker, GeoPoint, Coordinates } from "../database/markers";
+import Markers, {
+  IMarker,
+  GeoPoint,
+  Coordinates,
+  colorMapper
+} from "../database/markers";
 
 interface MapScreenProps {
   navigation: NavigationScreenProp<any, any>;
@@ -34,11 +39,13 @@ const MapScreen: FC<MapScreenProps> = ({ navigation }) => {
   useEffect(() => {
     (async () => {
       const snapshot = await Markers.getWithinRadius(
-        500,
+        20000,
         new GeoPoint(currentLocation.latitude, currentLocation.longitude)
       );
       setMarkers(
-        snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as IMarker))
+        snapshot.docs
+          .map(doc => ({ ...doc.data(), id: doc.id } as IMarker))
+          .filter(marker => !marker.attended)
       );
     })();
   }, [currentLocation]);
@@ -48,6 +55,7 @@ const MapScreen: FC<MapScreenProps> = ({ navigation }) => {
     latitudeDelta: 0.005,
     longitudeDelta: 0.005
   });
+
   const onUserLocationChange = event => {
     event.persist();
     const { coordinate } = event.nativeEvent;
@@ -75,6 +83,7 @@ const MapScreen: FC<MapScreenProps> = ({ navigation }) => {
           style={styles.mapStyle}>
           {markers.map(marker => (
             <Marker
+              pinColor={colorMapper(marker.necessity)}
               title={"Marcador"}
               key={marker.id}
               coordinate={marker.coordinates}

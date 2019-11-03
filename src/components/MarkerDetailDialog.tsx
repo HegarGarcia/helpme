@@ -1,18 +1,16 @@
-import React, { FC, useContext } from "react";
-import { ScrollView, View, StyleSheet } from "react-native";
+import React, { FC, useState, useContext, useEffect } from "react";
+import { ScrollView, StyleSheet } from "react-native";
 import {
   Dialog,
   Portal,
   Paragraph,
-  Divider,
   Button,
-  TextInput,
-  Avatar
+  Title,
+  Colors
 } from "react-native-paper";
-import { Spacing } from "../styles/base";
+import { Spacing, FontSize } from "../styles/base";
 
-//just for it to work with real data
-import { UserContext } from "../authentication/userContext";
+import Markers, { IMarker } from "../database/markers";
 
 interface MarkerDetailDialogProps {
   toggleVisibility: () => void;
@@ -23,71 +21,65 @@ const MarkerDetailDialog: FC<MarkerDetailDialogProps> = ({
   toggleVisibility,
   markerId
 }) => {
-  //just for it to work with real data
-  const { user } = useContext(UserContext);
+  const [marker, setMarker] = useState<IMarker>(null);
+
+  useEffect(() => {
+    (async () => {
+      const markerDoc = await Markers.get(markerId);
+      setMarker(markerDoc.data() as IMarker);
+    })();
+  });
 
   return (
-    <Portal>
-      <Dialog visible onDismiss={toggleVisibility}>
-        <Dialog.Title>Solicitud de Ayuda</Dialog.Title>
-        <ScrollView>
-          <Dialog.Content>
-            <Paragraph>¿Quien lo necesita?</Paragraph>
-            <Paragraph>{"sdas"}</Paragraph>
+    marker && (
+      <Portal>
+        <Dialog visible onDismiss={toggleVisibility}>
+          <Dialog.Title>Solicitud de Ayuda</Dialog.Title>
+          <ScrollView>
+            <Dialog.Content>
+              <Title style={styles.title}>¿Quien lo necesita?</Title>
+              <Paragraph>{marker.needy}</Paragraph>
 
-            <Paragraph>¿Que necesita?</Paragraph>
-            <Paragraph>{markerId}</Paragraph>
+              <Title style={styles.title}>¿Que necesita?</Title>
+              <Paragraph>{marker.necessity}</Paragraph>
 
-            <Paragraph>Referencia de ubicación</Paragraph>
-            <Paragraph>xd</Paragraph>
-          </Dialog.Content>
-          <Divider />
-          <View style={{ padding: 20 }}>
-            <View style={styles.dialogImageContainer}>
-              <Avatar.Image size={100} source={{ uri: user.photoURL }} />
+              {marker.details && (
+                <>
+                  <Title style={styles.title}>Detalles</Title>
+                  <Paragraph>{marker.details}</Paragraph>
+                </>
+              )}
 
-              <View style={styles.dialogTextContainer}>
-                <Paragraph style={styles.dialogTitles}>Nombre:</Paragraph>
-                <Paragraph>{user.displayName}</Paragraph>
-                <Paragraph style={styles.dialogTitles}>Email:</Paragraph>
-                <Paragraph>{user.email}</Paragraph>
-              </View>
-            </View>
-          </View>
-        </ScrollView>
+              {marker.references && (
+                <>
+                  <Title style={styles.title}>Referencia de ubicación</Title>
+                  <Paragraph>{marker.references}</Paragraph>
+                </>
+              )}
+            </Dialog.Content>
+          </ScrollView>
 
-        <Dialog.Actions
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between"
-          }}
-        >
-          <Button color="#F00" onPress={toggleVisibility}>
-            Cerrar
-          </Button>
-          <Button onPress={() => {}}>Marcar como atendido</Button>
-        </Dialog.Actions>
-      </Dialog>
-    </Portal>
+          <Dialog.Actions>
+            <Button color={Colors.red500} onPress={toggleVisibility}>
+              Cerrar
+            </Button>
+            <Button
+              onPress={() => {
+                Markers.markAsAttended(markerId);
+                toggleVisibility();
+              }}>
+              Marcar como atendido
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    )
   );
 };
 
 const styles = StyleSheet.create({
-  dialogImageContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  dialogTextContainer: {
-    marginHorizontal: Spacing.lg,
-    justifyContent: "center"
-  },
-  dialogTitles: {
-    fontWeight: "bold"
-  },
-  dialogButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between"
+  title: {
+    fontSize: FontSize.md
   }
 });
 

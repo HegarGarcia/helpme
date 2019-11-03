@@ -11,7 +11,8 @@ import { Spacing, Colors, FontSize } from "../styles/base";
 interface TextInputProps {
   placeholder: string;
   secureTextEntry?: boolean;
-  style: StyleProp<TextStyle>;
+  style?: StyleProp<TextStyle>;
+  value?: string;
   onChangeText: (text: string) => void;
 }
 

@@ -1,11 +1,18 @@
 import React, { FC, useState } from "react";
 import { View, Alert } from "react-native";
-import { Button, TextInput, Title, HelperText } from "react-native-paper";
+import {
+  Button,
+  TextInput,
+  Title,
+  HelperText,
+  Avatar
+} from "react-native-paper";
 
 import { signUpWithEmailAndPassword } from "../../authentication/authenticateWithEmailAndPassword";
 import styles from "./styles";
 import Validator from "validator";
 import { NavigationScreenProp } from "react-navigation";
+import { Spacing } from "../../styles/base";
 
 interface SignUpScreenProps {
   navigation: NavigationScreenProp<any, any>;
@@ -42,7 +49,13 @@ const SignUpScreen: FC<SignUpScreenProps> = props => {
 
   return (
     <View style={styles.container}>
-      <Title style={styles.title}>Registro</Title>
+      <Avatar.Image
+        size={200}
+        style={{ alignSelf: "center", marginBottom: Spacing.md }}
+        source={require("../../../assets/icon.png")}
+      />
+
+      <Title style={styles.title}>Crea tu cuenta</Title>
       <TextInput
         autoCompleteType='name'
         mode='outlined'

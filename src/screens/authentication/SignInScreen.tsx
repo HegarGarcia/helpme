@@ -1,11 +1,18 @@
 import React, { FC, useState } from "react";
 import { View } from "react-native";
-import { Button, TextInput, Title, HelperText } from "react-native-paper";
+import {
+  Button,
+  TextInput,
+  Title,
+  HelperText,
+  Avatar
+} from "react-native-paper";
 import { NavigationScreenProp } from "react-navigation";
 
 import { signInWithEmailAndPassword } from "../../authentication/authenticateWithEmailAndPassword";
 import Validator from "validator";
 import styles from "./styles";
+import { Spacing } from "../../styles/base";
 
 interface SignInScreenProps {
   navigation: NavigationScreenProp<any, any>;
@@ -32,7 +39,11 @@ const SignInScreen: FC<SignInScreenProps> = props => {
 
   return (
     <View style={styles.container}>
-      <Title style={styles.title}>Iniciar con tu cuenta</Title>
+      <Avatar.Image
+        size={200}
+        style={{ alignSelf: "center", marginBottom: Spacing.md }}
+        source={require("../../../assets/icon.png")}
+      />
 
       <TextInput
         autoCompleteType='email'

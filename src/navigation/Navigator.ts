@@ -3,13 +3,16 @@ import { createStackNavigator } from "react-navigation-stack";
 
 import SignInScreen from "../screens/authentication/SignInScreen";
 import SignUpScreen from "../screens/authentication/SignUpScreen";
+import PasswordResetScreen from "../screens/authentication/PasswordResetScreen";
+
 import MapScreen from "../screens/MapScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 
 const AuthStack = createStackNavigator(
   {
     SignIn: SignInScreen,
-    SignUp: SignUpScreen
+    SignUp: SignUpScreen,
+    PasswordReset: PasswordResetScreen
   },
   { headerMode: "none" }
 );

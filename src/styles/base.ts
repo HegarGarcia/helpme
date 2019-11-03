@@ -1,8 +1,8 @@
 import { DefaultTheme, Colors as MaterialColors } from "react-native-paper";
 
 export const Colors = {
-  primary: MaterialColors.green500,
-  secondary: MaterialColors.deepPurpleA200,
+  primary: MaterialColors.blueGrey700,
+  secondary: MaterialColors.yellowA200,
   white: MaterialColors.white,
   black: MaterialColors.black
 };

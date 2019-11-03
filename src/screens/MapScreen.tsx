@@ -102,7 +102,7 @@ const MapScreen: FC<MapScreenProps> = ({ navigation }) => {
             style={{ width: 32, height: 32 }}
             key='My Location'
             coordinate={currentLocation}
-            image={require("../../../assets/images/gps.png")}
+            image={require("../../assets/images/gps.png")}
           />
         </MapView>
 

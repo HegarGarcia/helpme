@@ -1,7 +1,17 @@
 import React, { FC, useContext } from "react";
 import { View, Image, StyleSheet } from "react-native";
-import { Dialog, Portal, Paragraph, Divider, Button } from "react-native-paper";
+import {
+  Dialog,
+  Portal,
+  Paragraph,
+  Divider,
+  Button,
+  Colors
+} from "react-native-paper";
+import { Avatar } from "react-native-paper";
 import { UserContext } from "../authentication/userContext";
+import { auth } from "firebase";
+import { Spacing } from "../styles/base";
 
 interface MenuDialogProps {
   goToProfile?: () => void;
@@ -13,6 +23,7 @@ const ProfileDetailDialog: FC<MenuDialogProps> = ({
   goToProfile
 }) => {
   const { user } = useContext(UserContext);
+  const signOut = () => auth().signOut();
 
   return (
     user && (
@@ -20,27 +31,20 @@ const ProfileDetailDialog: FC<MenuDialogProps> = ({
         <Dialog visible onDismiss={toggle}>
           <Dialog.Content>
             <View style={styles.dialogImageContainer}>
-              <Image
-                style={styles.dialogImage}
-                source={{ uri: user.photoURL }}
-              />
-            </View>
+              <Avatar.Image size={100} source={{ uri: user.photoURL }} />
 
-            <Divider />
-
-            <View style={styles.dialogTextContainer}>
-              <Paragraph style={styles.dialogTitles}>Nombre:</Paragraph>
-              <Paragraph>{user.displayName}</Paragraph>
-              <Paragraph style={styles.dialogTitles}>Email:</Paragraph>
-              <Paragraph>{user.email}</Paragraph>
+              <View style={styles.dialogTextContainer}>
+                <Paragraph style={styles.dialogTitles}>Nombre:</Paragraph>
+                <Paragraph>{user.displayName}</Paragraph>
+                <Paragraph style={styles.dialogTitles}>Email:</Paragraph>
+                <Paragraph>{user.email}</Paragraph>
+              </View>
             </View>
           </Dialog.Content>
 
-          <Divider />
-
           <Dialog.Actions style={styles.dialogButtons}>
-            <Button color='#F00' onPress={toggle}>
-              Cerrar
+            <Button color={Colors.red500} onPress={signOut}>
+              Cerrar Sesión
             </Button>
             <Button onPress={goToProfile}>Editar</Button>
           </Dialog.Actions>
@@ -54,15 +58,11 @@ const styles = StyleSheet.create({
   dialogImageContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 20
-  },
-  dialogImage: {
-    width: 128,
-    height: 128
+    alignItems: "center"
   },
   dialogTextContainer: {
-    marginTop: 20
+    marginHorizontal: Spacing.lg,
+    justifyContent: "center"
   },
   dialogTitles: {
     fontWeight: "bold"

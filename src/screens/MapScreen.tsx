@@ -110,7 +110,10 @@ const MapScreen: FC<MapScreenProps> = ({ navigation }) => {
 
         {showProfileDetail && (
           <ProfileDetailDialog
-            goToProfile={() => navigation.navigate("Profile")}
+            goToProfile={() => {
+              navigation.navigate("Profile");
+              toggleProfileDetail();
+            }}
             toggleVisibility={toggleProfileDetail}
           />
         )}

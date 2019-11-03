@@ -1,13 +1,10 @@
-import { DefaultTheme } from "react-native-paper";
+import { DefaultTheme, Colors as MaterialColors } from "react-native-paper";
 
 export const Colors = {
-  primary: "#2196f3",
-  secondary: "#1de9b6",
-  secondaryLigth: "#6dffe7",
-  secondaryDark: "#00b585",
-  tertiary: "",
-  white: "#FFF",
-  black: "#000"
+  primary: MaterialColors.green500,
+  secondary: MaterialColors.deepPurpleA200,
+  white: MaterialColors.white,
+  black: MaterialColors.black
 };
 
 export const Spacing = {
@@ -24,16 +21,11 @@ export const FontSize = {
   xg: 32
 };
 
-export const Fonts = {
-  primary: "",
-  secondary: ""
-};
-
 export const Theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: "#2196f3",
-    accent: "#1de9b6"
+    primary: Colors.primary,
+    accent: Colors.secondary
   }
 };

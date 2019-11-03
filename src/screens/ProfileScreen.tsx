@@ -1,13 +1,12 @@
 import React, { FC, useState, useContext, useEffect } from "react";
-import { Text, View, Image, StyleSheet, Alert } from "react-native";
+import { View, Image, StyleSheet, Alert } from "react-native";
 import { NavigationScreenProp } from "react-navigation";
 import { storage } from "firebase";
+import { TextInput, Button, Title, Avatar } from "react-native-paper";
 
-import Button from "../components/Button";
-import TextInput from "../components/TextInput";
 import ImagePicker from "../components/ImagePicker";
 
-import { Colors, FontSize, Spacing } from "../styles/base";
+import { Spacing } from "../styles/base";
 import { UserContext } from "../authentication/userContext";
 
 import { defaultProfilePhoto } from "../constants/photos";
@@ -70,9 +69,11 @@ const ProfileScreen: FC<ProfileScreenProps> = props => {
   return (
     user && (
       <View style={styles.container}>
-        <Text style={styles.title}>Modificar Cuenta</Text>
-        <Image
+        <Title style={styles.title}>Modificar Cuenta</Title>
+
+        <Avatar.Image
           style={styles.profilePicture}
+          size={150}
           source={
             userProfileUri
               ? {
@@ -81,28 +82,32 @@ const ProfileScreen: FC<ProfileScreenProps> = props => {
               : defaultProfilePhoto
           }
         />
+
         <ImagePicker setImageUri={setImageUri} />
+
         <TextInput
-          style={{ color: Colors.black }}
-          onChangeText={setDisplayname}
+          label='Nombre'
+          mode={"outlined"}
+          style={styles.input}
           value={displayName}
-          placeholder='Nombre'
-        />
-        <Button
-          disabled={areActionButtonsDisabled}
-          title='Guardar Cambios'
-          style={styles.saveButton}
-          color={Colors.secondaryDark}
-          onPress={updateUserProfile}
+          onChangeText={setDisplayname}
         />
 
         <Button
           disabled={areActionButtonsDisabled}
-          title='Cancelar'
-          style={styles.cancelButton}
-          color={Colors.secondaryDark}
-          onPress={() => props.navigation.navigate("Map")}
-        />
+          mode='contained'
+          style={styles.input}
+          onPress={updateUserProfile}>
+          Guardar Cambios
+        </Button>
+
+        <Button
+          disabled={areActionButtonsDisabled}
+          mode='text'
+          style={styles.input}
+          onPress={() => props.navigation.navigate("Map")}>
+          Cancelar
+        </Button>
       </View>
     )
   );
@@ -112,29 +117,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    padding: 30
+    padding: Spacing.xg
   },
   title: {
-    textAlign: "center",
-    fontSize: FontSize.lg,
-    color: Colors.black,
-    fontWeight: "600",
-    marginBottom: Spacing.md
+    textAlign: "center"
   },
   profilePicture: {
-    width: 150,
-    height: 150,
     alignSelf: "center",
     margin: Spacing.md
   },
-  saveButton: {
-    backgroundColor: "transparent",
-    borderColor: Colors.secondaryDark,
-    borderWidth: 2,
-    borderRadius: 50
-  },
-  cancelButton: {
-    backgroundColor: "transparent"
+  input: {
+    marginVertical: Spacing.sm
   }
 });
 

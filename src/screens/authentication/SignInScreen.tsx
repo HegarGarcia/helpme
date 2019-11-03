@@ -1,13 +1,10 @@
 import React, { FC, useState } from "react";
-import { Text, ImageBackground } from "react-native";
+import { View } from "react-native";
+import { Button, TextInput, Title } from "react-native-paper";
 import { NavigationScreenProp } from "react-navigation";
 
 import { signInWithEmailAndPassword } from "../../authentication/authenticateWithEmailAndPassword";
 
-import TextInput from "../../components/TextInput";
-import Button from "../../components/Button";
-
-import { Colors } from "../../styles/base";
 import styles from "./styles";
 
 const BackgroundImage = require("../../../assets/images/help_hands.jpg");
@@ -21,34 +18,39 @@ const SignInScreen: FC<LoginScreenProps> = props => {
   const [password, setPassword] = useState("");
 
   const signIn = () => signInWithEmailAndPassword({ email, password });
-  const navigateToSignUp = () => props.navigation.navigate("SignUp");
+  const goToSignUp = () => props.navigation.navigate("SignUp");
 
   return (
-    <ImageBackground
-      style={styles.container}
-      blurRadius={8}
-      source={BackgroundImage}>
-      <Text style={styles.title}>Iniciar con tu cuenta</Text>
+    <View style={styles.container}>
+      <Title style={styles.title}>Iniciar con tu cuenta</Title>
 
-      <TextInput onChangeText={setEmail} placeholder='Email' />
       <TextInput
+        autoCompleteType='email'
+        mode='outlined'
+        style={styles.textInput}
+        onChangeText={setEmail}
+        value={email}
+        label='Email'
+      />
+
+      <TextInput
+        autoCompleteType='off'
+        mode='outlined'
+        style={styles.textInput}
         secureTextEntry={true}
         onChangeText={setPassword}
-        placeholder='Contraseña'
+        value={password}
+        label='Contraseña'
       />
 
-      <Button
-        title='Iniciar Sesión'
-        style={{ backgroundColor: Colors.secondaryLigth }}
-        onPress={signIn}
-      />
+      <Button mode='contained' style={styles.actionButton} onPress={signIn}>
+        Iniciar Sesión
+      </Button>
 
-      <Button
-        title='Registrarme como filántropo'
-        style={{ backgroundColor: Colors.secondaryLigth }}
-        onPress={navigateToSignUp}
-      />
-    </ImageBackground>
+      <Button mode='contained' style={styles.actionButton} onPress={goToSignUp}>
+        Registrate
+      </Button>
+    </View>
   );
 };
 

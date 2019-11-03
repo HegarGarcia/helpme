@@ -3,11 +3,7 @@ import { View } from "react-native";
 import { Button, TextInput, Title } from "react-native-paper";
 
 import { signUpWithEmailAndPassword } from "../../authentication/authenticateWithEmailAndPassword";
-
-import { Colors } from "../../styles/base";
 import styles from "./styles";
-
-const BackgroundImage = require("../../../assets/images/help_hands.jpg");
 
 const SignUpScreen: FC<any> = props => {
   const [email, setEmail] = useState("");

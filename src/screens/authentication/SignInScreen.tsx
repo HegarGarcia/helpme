@@ -7,8 +7,6 @@ import { signInWithEmailAndPassword } from "../../authentication/authenticateWit
 
 import styles from "./styles";
 
-const BackgroundImage = require("../../../assets/images/help_hands.jpg");
-
 interface LoginScreenProps {
   navigation: NavigationScreenProp<any, any>;
 }

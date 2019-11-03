@@ -12,23 +12,82 @@ export const signUpWithEmailAndPassword = async ({
   password,
   username
 }: EmailAndPassword) => {
-  const user = await auth()
-    .createUserWithEmailAndPassword(email, password)
-    .catch(err =>
-      Alert.alert("Problema en la Creación de Cuenta", err.message)
-    );
+  let errorMessage = "";
 
-  if (user) {
-    await user.user.updateProfile({ displayName: username });
+  try {
+    const { user } = await auth().createUserWithEmailAndPassword(
+      email,
+      password
+    );
+    await user.sendEmailVerification();
+    if (user) {
+      await user.updateProfile({ displayName: username });
+    }
+  } catch (err) {
+    switch (err.code) {
+      case "auth/email-already-in-use":
+        errorMessage = "Ya hay una cuenta registrada con su email";
+        break;
+      case "auth/invalid-email":
+        errorMessage = "Email inválido";
+        break;
+      case "auth/weak-password":
+        errorMessage = "Su password es débil";
+        break;
+    }
+  }
+
+  if (errorMessage) {
+    Alert.alert("Error en creación de cuenta", errorMessage);
   }
 };
 
 export const signInWithEmailAndPassword = async ({
   email,
   password
-}: EmailAndPassword) =>
+}: EmailAndPassword) => {
+  let errorMessage = "";
+  try {
+    const { user } = await auth().signInWithEmailAndPassword(email, password);
+    if (!user.emailVerified) {
+      auth().signOut();
+      Alert.alert("Cuenta no verificada", "Revisa tu correo");
+    }
+  } catch (err) {
+    switch (err.code) {
+      case "auth/email-already-in-use":
+        errorMessage = "Ya hay una cuenta create con tu email";
+        break;
+      case "auth/user-not-found":
+        errorMessage = "Usuario no registrado";
+        break;
+      case "auth/wrong-password":
+        errorMessage = "Contraseña inválida";
+        break;
+      default:
+        errorMessage = "Credenciales inválidas";
+        break;
+    }
+  }
+
+  if (errorMessage) {
+    Alert.alert("Error en inicio de sesión", errorMessage);
+  }
+};
+
+export const forgotMyPassword = async (email: string) => {
   await auth()
-    .signInWithEmailAndPassword(email, password)
-    .catch(err =>
-      Alert.alert("Error", `Problema en inicio de sesión: ${err.message}`)
-    );
+    .sendPasswordResetEmail(email)
+    .catch(err => {
+      let errorMessage = "";
+      switch (err.code) {
+        case "auth/user-not-found":
+          errorMessage = "Email no reigstrado";
+          break;
+      }
+
+      if (errorMessage) {
+        Alert.alert("Error en recuperación de contraseña", errorMessage);
+      }
+    });
+};

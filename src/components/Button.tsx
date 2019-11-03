@@ -4,7 +4,9 @@ import {
   NativeSyntheticEvent,
   NativeTouchEvent,
   TouchableOpacity,
-  Text
+  Text,
+  StyleProp,
+  ViewStyle
 } from "react-native";
 import { Colors, Spacing } from "../styles/base";
 
@@ -12,19 +14,19 @@ type ValidColor = typeof Colors[keyof typeof Colors];
 
 interface ButtonProps {
   title: string;
-  backgroundColor?: ValidColor;
+  style?: StyleProp<ViewStyle>;
   color?: ValidColor;
   onPress: (ev: NativeSyntheticEvent<NativeTouchEvent>) => void;
 }
 
 const Button: FC<ButtonProps> = ({
-  backgroundColor,
+  style: TouchableOpacityStyles,
   color,
   title,
   onPress
 }) => (
   <TouchableOpacity
-    style={[styles.button, backgroundColor && { backgroundColor }]}
+    style={[styles.button, TouchableOpacityStyles]}
     onPress={onPress}>
     <Text style={[styles.text, color && { color }]}>{title.toUpperCase()}</Text>
   </TouchableOpacity>

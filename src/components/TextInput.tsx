@@ -3,20 +3,22 @@ import {
   TextInput as Input,
   View,
   StyleSheet,
-  NativeSyntheticEvent,
-  TextInputEndEditingEventData
+  StyleProp,
+  TextStyle
 } from "react-native";
 import { Spacing, Colors, FontSize } from "../styles/base";
 
 interface TextInputProps {
   placeholder: string;
   secureTextEntry?: boolean;
+  style?: StyleProp<TextStyle>;
+  value?: string;
   onChangeText: (text: string) => void;
 }
 
-const TextInput: FC<TextInputProps> = props => (
+const TextInput: FC<TextInputProps> = ({ style: textInputStyle, ...props }) => (
   <View style={styles.container}>
-    <Input style={styles.input} {...props} />
+    <Input style={[styles.input, textInputStyle]} {...props} />
   </View>
 );
 

@@ -39,13 +39,13 @@ const SignInScreen: FC<LoginScreenProps> = props => {
 
       <Button
         title='Iniciar Sesión'
-        backgroundColor={Colors.secondaryLigth}
+        style={{ backgroundColor: Colors.secondaryLigth }}
         onPress={signIn}
       />
 
       <Button
         title='Registrarme como filántropo'
-        backgroundColor={Colors.secondaryLigth}
+        style={{ backgroundColor: Colors.secondaryLigth }}
         onPress={navigateToSignUp}
       />
     </ImageBackground>

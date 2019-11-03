@@ -31,14 +31,13 @@ const ProfileDetailDialog: FC<MenuDialogProps> = ({
         <Dialog visible onDismiss={toggle}>
           <Dialog.Content>
             <View style={styles.dialogImageContainer}>
-              <Avatar.Image size={100} source={{ uri: user.photoURL }} />
-
-              <View style={styles.dialogTextContainer}>
-                <Paragraph style={styles.dialogTitles}>Nombre:</Paragraph>
-                <Paragraph>{user.displayName}</Paragraph>
-                <Paragraph style={styles.dialogTitles}>Email:</Paragraph>
-                <Paragraph>{user.email}</Paragraph>
-              </View>
+              <Avatar.Image size={150} source={{ uri: user.photoURL }} />
+            </View>
+            <View style={styles.dialogTextContainer}>
+              <Paragraph style={styles.dialogTitles}>Nombre:</Paragraph>
+              <Paragraph>{user.displayName}</Paragraph>
+              <Paragraph style={styles.dialogTitles}>Email:</Paragraph>
+              <Paragraph>{user.email}</Paragraph>
             </View>
           </Dialog.Content>
 
@@ -56,13 +55,12 @@ const ProfileDetailDialog: FC<MenuDialogProps> = ({
 
 const styles = StyleSheet.create({
   dialogImageContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: Spacing.md
   },
   dialogTextContainer: {
-    marginHorizontal: Spacing.lg,
-    justifyContent: "center"
+    marginHorizontal: Spacing.sm,
   },
   dialogTitles: {
     fontWeight: "bold"

@@ -4,7 +4,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import SignInScreen from "../screens/authentication/SignIn";
 import SignUpScreen from "../screens/authentication/SignUp";
 
-import MapScreen from "../screens/MapScreen/MapScreen";
+import ProfileScreen from "../screens/profile/ProfileScreen";
 
 const AuthStack = createStackNavigator(
   {
@@ -15,9 +15,7 @@ const AuthStack = createStackNavigator(
 );
 
 const AppStack = createStackNavigator(
-  {
-    Map: MapScreen
-  },
+  { ProfileScreen },
   { headerMode: "none" }
 );
 

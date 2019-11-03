@@ -17,7 +17,13 @@ const ImagePicker: FC<ImagePickerProps> = ({ setImageUri }) => {
     }
   };
 
-  return <Button title='Selecciona una foto' onPress={pickImage} />;
+  return (
+    <Button
+      title='Selecciona una foto'
+      style={{ borderRadius: 50 }}
+      onPress={pickImage}
+    />
+  );
 };
 
 export default ImagePicker;

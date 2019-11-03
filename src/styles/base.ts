@@ -1,3 +1,5 @@
+import { DefaultTheme } from "react-native-paper";
+
 export const Colors = {
   primary: "#2196f3",
   secondary: "#1de9b6",
@@ -25,4 +27,13 @@ export const FontSize = {
 export const Fonts = {
   primary: "",
   secondary: ""
+};
+
+export const Theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: "#2196f3",
+    accent: "#1de9b6"
+  }
 };

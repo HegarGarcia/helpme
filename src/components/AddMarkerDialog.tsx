@@ -3,28 +3,23 @@ import {
   Dialog,
   Portal,
   Paragraph,
-  Divider,
   Button,
-  TextInput,
-  Text
+  TextInput
 } from "react-native-paper";
-import { TouchableOpacity } from "react-native";
 
 interface AddMarkerDialogProps {
-  isVisible: boolean;
-  toggle: () => void;
+  toggleVisibility: () => void;
 }
 
-const AddMarkerDialog: FC<AddMarkerDialogProps> = ({ isVisible, toggle }) => {
+const AddMarkerDialog: FC<AddMarkerDialogProps> = ({ toggleVisibility }) => {
   return (
     <Portal>
-      <Dialog visible={isVisible} onDismiss={toggle}>
+      <Dialog visible onDismiss={toggleVisibility}>
         <Dialog.Title>¿A quien quieres ayudar?</Dialog.Title>
         <Dialog.Content>
           <Paragraph>¿Quien lo necesita?</Paragraph>
           <TextInput
-            placeholder={"Nombre o forma de identificarlo "}
-          ></TextInput>
+            placeholder={"Nombre o forma de identificarlo "}></TextInput>
 
           <Paragraph>¿Que se necesita?</Paragraph>
           <TextInput placeholder={"Ej: Zapatos, Ropa, Agua"}></TextInput>
@@ -36,9 +31,8 @@ const AddMarkerDialog: FC<AddMarkerDialogProps> = ({ isVisible, toggle }) => {
           style={{
             flexDirection: "row",
             justifyContent: "space-between"
-          }}
-        >
-          <Button color="#F00" onPress={toggle}>
+          }}>
+          <Button color='#F00' onPress={toggleVisibility}>
             Cerrar
           </Button>
           <Button onPress={() => {}}>Publicar</Button>

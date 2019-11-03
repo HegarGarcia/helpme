@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, View, StatusBar } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { Provider as PaperProvider } from "react-native-paper";
 import { AppLoading } from "expo";
-import { AppNavigator, AuthNavigator } from "../navigation/Navigator";
 import { apps, auth, initializeApp } from "firebase";
+
+import { AppNavigator, AuthNavigator } from "../navigation/Navigator";
+import { Theme } from "../styles/base";
 import firebaseConfig from "../config/firebase";
 import { UserContext } from "../authentication/userContext";
 
-const Main = () => {
+const MainScreen = () => {
   const [isFirebaseLoaded, setIsFirebaseLoaded] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { setUser } = useContext(UserContext);
@@ -27,7 +30,9 @@ const Main = () => {
 
   return isFirebaseLoaded ? (
     <View style={styles.container}>
-      {isLoggedIn ? <AppNavigator /> : <AuthNavigator />}
+      <PaperProvider theme={Theme}>
+        {isLoggedIn ? <AppNavigator /> : <AuthNavigator />}
+      </PaperProvider>
     </View>
   ) : (
     <AppLoading />
@@ -41,4 +46,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Main;
+export default MainScreen;

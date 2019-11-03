@@ -29,29 +29,37 @@ const ProfileScreen: FC<ProfileScreenProps> = props => {
 
   const updateUserProfile = async () => {
     setIsButtonDisable(true);
+    if (imageUri) {
+      const blob = await fetch(imageUri).then(response => response.blob());
 
-    const blob = await fetch(imageUri).then(response => response.blob());
+      const uploadTask = storage()
+        .ref()
+        .child(`profile${user.uid}`)
+        .put(blob);
 
-    const uploadTask = storage()
-      .ref()
-      .child(`profile${user.uid}`)
-      .put(blob);
-
-    uploadTask.on(
-      storage.TaskEvent.STATE_CHANGED,
-      () => {},
-      err => Alert.alert("Error", err.message),
-      async () => {
-        const photoURL = await uploadTask.snapshot.ref.getDownloadURL();
-        await user.updateProfile({
-          displayName,
-          photoURL
-        });
-        setUser(user);
-        setIsButtonDisable(false);
-        props.navigation.navigate("Map");
-      }
-    );
+      uploadTask.on(
+        storage.TaskEvent.STATE_CHANGED,
+        () => {},
+        err => Alert.alert("Error", err.message),
+        async () => {
+          const photoURL = await uploadTask.snapshot.ref.getDownloadURL();
+          await user.updateProfile({
+            displayName,
+            photoURL
+          });
+          setUser(user);
+          setIsButtonDisable(false);
+          props.navigation.navigate("Map");
+        }
+      );
+    } else {
+      await user.updateProfile({
+        displayName
+      });
+      setUser(user);
+      setIsButtonDisable(false);
+      props.navigation.navigate("Map");
+    }
   };
 
   return (
@@ -80,6 +88,14 @@ const ProfileScreen: FC<ProfileScreenProps> = props => {
           style={styles.saveButton}
           color={Colors.secondaryDark}
           onPress={updateUserProfile}
+        />
+
+        <Button
+          disabled={isButtonDisable}
+          title='Cancelar'
+          style={styles.cancelButton}
+          color={Colors.secondaryDark}
+          onPress={() => props.navigation.navigate("Map")}
         />
       </View>
     )
@@ -110,6 +126,9 @@ const styles = StyleSheet.create({
     borderColor: Colors.secondaryDark,
     borderWidth: 2,
     borderRadius: 50
+  },
+  cancelButton: {
+    backgroundColor: "transparent"
   }
 });
 

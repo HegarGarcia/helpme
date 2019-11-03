@@ -1,36 +1,39 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, FC } from "react";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import { StyleSheet, View, Dimensions } from "react-native";
-import {
-  FAB,
-  Provider as PaperProvider,
-  DefaultTheme
-} from "react-native-paper";
+import { FAB, Appbar } from "react-native-paper";
 
-import ActionBar from "./components/ActionBar";
-import AddMarkerDialog from "./components/AddMarkerDialog";
-import MarkerDetailDialog from "./components/MarkerDetailDialog";
-import { MarkerDetails } from "../../interfaces/MarkerDetails";
+import ActionBar from "../components/ActionBar";
+import AddMarkerDialog from "../components/AddMarkerDialog";
+import MarkerDetailDialog from "../components/MarkerDetailDialog";
 
-import Markers, { IMarker, GeoPoint } from "../../database/markers";
-import { UserContext } from "../../authentication/userContext";
+import Markers, { IMarker, GeoPoint } from "../database/markers";
+import { UserContext } from "../authentication/userContext";
+import { NavigationScreenProp } from "react-navigation";
+import ProfileDetailDialog from "../components/ProfileDetailDialog";
 
 interface Location {
   latitude: number;
   longitude: number;
 }
 
-export default function MapScreen() {
+interface MapScreenProps {
+  navigation: NavigationScreenProp<any, any>;
+}
+
+const MapScreen: FC<MapScreenProps> = ({ navigation }) => {
   const [markers, setMarkers] = useState<IMarker[]>([]);
   const [showAddMarkerDialog, setShowAddMarkerDialog] = useState(false);
   const [showMarkerDetail, setShowMarkerDetail] = useState(false);
   const [selectedMarker, setSelectedMarker] = useState<string>("");
+  const [showProfileDetail, setShowProfileDetail] = useState(false);
   const { user } = useContext(UserContext);
   const [currentLocation, setCurrentLocation] = useState<Location>({
     latitude: 19.246346,
     longitude: -103.725337
   });
+
   const region = {
     ...currentLocation,
     latitudeDelta: 0.0922,
@@ -42,10 +45,10 @@ export default function MapScreen() {
     console.ignoredYellowBox = ["Setting timer"];
   });
 
-  // useEffect(() => {
-  //   const interval = setInterval(getCurrentGPSLocation, 5000);
-  //   return () => clearInterval(interval);
-  // }, []);
+  useEffect(() => {
+    const interval = setInterval(getCurrentGPSLocation, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -57,7 +60,6 @@ export default function MapScreen() {
       setMarkers(
         snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as IMarker))
       );
-      console.log(markers);
     })();
   }, [currentLocation]);
 
@@ -70,13 +72,15 @@ export default function MapScreen() {
     );
   };
 
-  const toggleFab = () => setShowAddMarkerDialog(!showAddMarkerDialog);
+  const toggleAddMarker = () => setShowAddMarkerDialog(!showAddMarkerDialog);
   const toggleMarkerDetailDialog = () => setShowMarkerDetail(!showMarkerDetail);
-  const caca = () => console.log("Hola");
+  const toggleProfileDetail = () => setShowProfileDetail(!showProfileDetail);
 
   return (
-    <PaperProvider theme={theme}>
-      <ActionBar />
+    <>
+      <ActionBar>
+        <Appbar.Action icon='account' onPress={toggleProfileDetail} />
+      </ActionBar>
       <View style={styles.container}>
         <MapView
           initialRegion={region}
@@ -88,9 +92,8 @@ export default function MapScreen() {
               key={marker.id}
               coordinate={marker.coordinates}
               onPress={() => {
-                console.log("showMarkerDetail");
-                // toggleMarkerDetailDialog();
-                // setSelectedMarker(marker.id);
+                setSelectedMarker(marker.id);
+                toggleMarkerDetailDialog();
               }}
             />
           ))}
@@ -99,24 +102,33 @@ export default function MapScreen() {
             style={{ width: 32, height: 32 }}
             key='My Location'
             coordinate={currentLocation}
-            onPress={caca}
             image={require("../../../assets/images/gps.png")}
           />
         </MapView>
 
-        <FAB style={styles.fab} icon='plus' onPress={toggleFab} />
+        <FAB style={styles.fab} icon='plus' onPress={toggleAddMarker} />
 
-        {/* <MarkerDetailDialog
-          isVisible={showMarkerDetail}
-          toggle={toggleMarkerDetailDialog}
-          markerId={selectedMarker}
-        /> */}
+        {showProfileDetail && (
+          <ProfileDetailDialog
+            goToProfile={() => navigation.navigate("Profile")}
+            toggleVisibility={toggleProfileDetail}
+          />
+        )}
 
-        <AddMarkerDialog isVisible={showAddMarkerDialog} toggle={toggleFab} />
+        {showMarkerDetail && (
+          <MarkerDetailDialog
+            toggleVisibility={toggleMarkerDetailDialog}
+            markerId={selectedMarker}
+          />
+        )}
+
+        {showAddMarkerDialog && (
+          <AddMarkerDialog toggleVisibility={toggleAddMarker} />
+        )}
       </View>
-    </PaperProvider>
+    </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -137,11 +149,4 @@ const styles = StyleSheet.create({
   }
 });
 
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: "#2196f3",
-    accent: "#1de9b6"
-  }
-};
+export default MapScreen;

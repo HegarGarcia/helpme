@@ -4,4 +4,4 @@ Helping Hand es una aplicacion movil en donde los usuarios pueden marcar en el m
 ## Cuentas de prueba
 email: orabdr0647m@moddema.ga
 
-pass: test123
+pass: test1234

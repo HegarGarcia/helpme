@@ -30,14 +30,14 @@ const MapScreen: FC<MapScreenProps> = ({ navigation }) => {
   const [showProfileDetail, setShowProfileDetail] = useState(false);
   const { user } = useContext(UserContext);
   const [currentLocation, setCurrentLocation] = useState<Location>({
-    latitude: 19.246346,
-    longitude: -103.725337
+    latitude: 0,
+    longitude: 0
   });
 
   const region = {
     ...currentLocation,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421
+    latitudeDelta: 0,
+    longitudeDelta: 0
   };
 
   useEffect(() => {
@@ -46,15 +46,9 @@ const MapScreen: FC<MapScreenProps> = ({ navigation }) => {
   });
 
   useEffect(() => {
-    const interval = setInterval(getCurrentGPSLocation, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
     (async () => {
-      console.log("Started");
       const snapshot = await Markers.getWithinRadius(
-        300,
+        500,
         new GeoPoint(currentLocation.latitude, currentLocation.longitude)
       );
       setMarkers(
@@ -63,15 +57,19 @@ const MapScreen: FC<MapScreenProps> = ({ navigation }) => {
     })();
   }, [currentLocation]);
 
-  const getCurrentGPSLocation = () => {
-    navigator.geolocation.getCurrentPosition(position =>
-      setCurrentLocation({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      })
-    );
+  const getMapRegion = () => ({
+    ...currentLocation,
+    latitudeDelta: 0.005,
+    longitudeDelta: 0.005
+  });
+  const onUserLocationChange = event => {
+    event.persist();
+    const { coordinate } = event.nativeEvent;
+    setCurrentLocation({
+      latitude: coordinate.latitude,
+      longitude: coordinate.longitude
+    });
   };
-
   const toggleAddMarker = () => setShowAddMarkerDialog(!showAddMarkerDialog);
   const toggleMarkerDetailDialog = () => setShowMarkerDetail(!showMarkerDetail);
   const toggleProfileDetail = () => setShowProfileDetail(!showProfileDetail);
@@ -83,8 +81,11 @@ const MapScreen: FC<MapScreenProps> = ({ navigation }) => {
       </ActionBar>
       <View style={styles.container}>
         <MapView
-          initialRegion={region}
-          onMapReady={getCurrentGPSLocation}
+          showsUserLocation
+          showsMyLocationButton
+          loadingEnabled
+          region={getMapRegion()}
+          onUserLocationChange={onUserLocationChange}
           style={styles.mapStyle}>
           {markers.map(marker => (
             <Marker
@@ -97,13 +98,6 @@ const MapScreen: FC<MapScreenProps> = ({ navigation }) => {
               }}
             />
           ))}
-
-          <Marker
-            style={{ width: 32, height: 32 }}
-            key='My Location'
-            coordinate={currentLocation}
-            image={require("../../assets/images/gps.png")}
-          />
         </MapView>
 
         <FAB style={styles.fab} icon='plus' onPress={toggleAddMarker} />

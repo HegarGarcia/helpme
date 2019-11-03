@@ -2,7 +2,7 @@ import { firestore } from "firebase/app";
 import "firebase/firestore";
 
 import { GeoFirestore } from "geofirestore";
-import { GeoPoint as IGeoPoint, DocumentData } from "@firebase/firestore-types";
+import { GeoPoint as IGeoPoint } from "@firebase/firestore-types";
 
 export interface Coordinates {
   latitude: number;
@@ -10,16 +10,22 @@ export interface Coordinates {
 }
 
 export interface IMarker {
-  id: string;
+  id?: string;
+  needy: string;
+  necessity: string;
+  details: string;
+  references: string;
   attended: boolean;
+  userUid: string;
   coordinates: IGeoPoint;
-  user: string;
 }
 
 export const GeoPoint = firestore.GeoPoint;
 
-const transformCoordinateToGeoPoint = ({ latitude, longitude }: Coordinates) =>
-  new firestore.GeoPoint(latitude, longitude);
+export const transformCoordinateToGeoPoint = ({
+  latitude,
+  longitude
+}: Coordinates) => new firestore.GeoPoint(latitude, longitude);
 
 export default class Markers {
   private static getGeofireMarkersReference() {
@@ -27,13 +33,9 @@ export default class Markers {
     return geoRef.collection("markers");
   }
 
-  static async add(userUid: string, coordinates: Coordinates) {
+  static async add(marker: IMarker) {
     const markersCollection = Markers.getGeofireMarkersReference();
-    await markersCollection.add({
-      user: userUid,
-      attended: false,
-      coordinates: transformCoordinateToGeoPoint(coordinates)
-    });
+    await markersCollection.add(marker);
   }
 
   static getWithinRadius(radius: number, center: Coordinates) {

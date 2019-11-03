@@ -1,22 +1,15 @@
-import React, { useState, useEffect, useContext, FC } from "react";
-import MapView from "react-native-maps";
-import { Marker } from "react-native-maps";
+import React, { useState, useEffect, FC } from "react";
+import { NavigationScreenProp } from "react-navigation";
 import { StyleSheet, View, Dimensions } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 import { FAB, Appbar } from "react-native-paper";
 
 import ActionBar from "../components/ActionBar";
 import AddMarkerDialog from "../components/AddMarkerDialog";
 import MarkerDetailDialog from "../components/MarkerDetailDialog";
-
-import Markers, { IMarker, GeoPoint } from "../database/markers";
-import { UserContext } from "../authentication/userContext";
-import { NavigationScreenProp } from "react-navigation";
 import ProfileDetailDialog from "../components/ProfileDetailDialog";
 
-interface Location {
-  latitude: number;
-  longitude: number;
-}
+import Markers, { IMarker, GeoPoint, Coordinates } from "../database/markers";
 
 interface MapScreenProps {
   navigation: NavigationScreenProp<any, any>;
@@ -28,17 +21,10 @@ const MapScreen: FC<MapScreenProps> = ({ navigation }) => {
   const [showMarkerDetail, setShowMarkerDetail] = useState(false);
   const [selectedMarker, setSelectedMarker] = useState<string>("");
   const [showProfileDetail, setShowProfileDetail] = useState(false);
-  const { user } = useContext(UserContext);
-  const [currentLocation, setCurrentLocation] = useState<Location>({
+  const [currentLocation, setCurrentLocation] = useState<Coordinates>({
     latitude: 0,
     longitude: 0
   });
-
-  const region = {
-    ...currentLocation,
-    latitudeDelta: 0,
-    longitudeDelta: 0
-  };
 
   useEffect(() => {
     console.disableYellowBox = true;
@@ -120,7 +106,10 @@ const MapScreen: FC<MapScreenProps> = ({ navigation }) => {
         )}
 
         {showAddMarkerDialog && (
-          <AddMarkerDialog toggleVisibility={toggleAddMarker} />
+          <AddMarkerDialog
+            currentLocation={currentLocation}
+            toggleVisibility={toggleAddMarker}
+          />
         )}
       </View>
     </>

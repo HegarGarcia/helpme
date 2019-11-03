@@ -33,7 +33,7 @@ const SignUpScreen: FC<any> = props => {
 
       <Button
         title='Registrarme'
-        backgroundColor={Colors.secondaryLigth}
+        style={{ backgroundColor: Colors.secondaryLigth }}
         onPress={() =>
           signUpWithEmailAndPassword({ email, password, username })
         }
@@ -41,7 +41,7 @@ const SignUpScreen: FC<any> = props => {
 
       <Button
         title='Iniciar sesión'
-        backgroundColor={Colors.secondaryLigth}
+        style={{ backgroundColor: Colors.secondaryLigth }}
         onPress={() => props.navigation.navigate("SignIn")}
       />
     </ImageBackground>

@@ -1,24 +1,17 @@
 import React, { useState } from "react";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  Button,
-  TextInput,
-  Image
-} from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import {
   FAB,
   Provider as PaperProvider,
-  Dialog,
-  Portal,
-  Paragraph
+  DefaultTheme
 } from "react-native-paper";
 
-import ActionBar from "./ActionBar";
+import ActionBar from "./components/ActionBar";
+import AddMarkerDialog from "./components/AddMarkerDialog";
+import MarkerDetailDialog from "./components/MarkerDetailDialog";
+import { MarkerDetails } from "../../interfaces/MarkerDetails";
 
 interface Location {
   latitude: number;
@@ -28,20 +21,29 @@ interface Location {
 export default function MapScreen() {
   const [markers, setMarkers] = useState([]);
   const [isVisible, setVisible] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
+  const [markerDetails, setMarkerDetails] = useState<MarkerDetails>({
+    coords: { latitude: 0, longitude: 0 },
+    userId: " ",
+    who: " ",
+    what: " ",
+    where: " ",
+    photoUrl: " "
+  });
   const [location, setLocation] = useState<Location>({
-    latitude: 19.4256,
-    longitude: -103.2956
+    latitude: 19.246346,
+    longitude: -103.725337
   });
 
-  const _showDialog = () => setVisible(true);
-  const _hideDialog = () => setVisible(false);
+  const toggleFab = () => setVisible(!isVisible);
+  const showDetailToggle = () => setShowDetail(!showDetail);
 
   const putMarker = coord => {
-    setMarkers(currentMarkers => [...markers, coord]);
+    setMarkers([...markers, coord]);
     console.log(coord);
   };
 
-  const setCurrentGPSLocation = () => {
+  const getCurrentGPSLocation = () => {
     navigator.geolocation.getCurrentPosition(position => {
       console.log(position);
       setLocation({
@@ -52,24 +54,19 @@ export default function MapScreen() {
   };
 
   let region = {
-    latitude: 19.4256,
-    longitude: -103.2956,
+    latitude: 19.246346,
+    longitude: -103.725337,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421
   };
 
   return (
-    <PaperProvider>
-      <ActionBar></ActionBar>
+    <PaperProvider theme={theme}>
+      <ActionBar />
       <View style={styles.container}>
         <MapView
-          initialRegion={{
-            latitude: 19.246346,
-            longitude: -103.725337,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
-          }}
-          onMapReady={setCurrentGPSLocation}
+          initialRegion={region}
+          onMapReady={getCurrentGPSLocation}
           style={styles.mapStyle}
           onPress={e => putMarker(e.nativeEvent.coordinate)}
         >
@@ -78,9 +75,13 @@ export default function MapScreen() {
               title={"something"}
               key={marker}
               coordinate={marker}
-              onPress={e => console.log(marker)}
-            ></Marker>
+              onPress={() => {
+                setMarkerDetails({ ...markerDetails, coords: marker });
+                showDetailToggle();
+              }}
+            />
           ))}
+
           <Marker
             style={{ width: 32, height: 32 }}
             key="My Location"
@@ -88,24 +89,14 @@ export default function MapScreen() {
             image={require("../../../assets/images/gps.png")}
           ></Marker>
         </MapView>
-        <FAB style={styles.fab} icon="plus" onPress={_showDialog} />
-        <Portal>
-          <Dialog visible={isVisible} onDismiss={_hideDialog}>
-            <Dialog.Title>¿A quien quieres ayudar?</Dialog.Title>
-            <Dialog.Content>
-              <Paragraph>¿Quien lo necesita?</Paragraph>
-              <TextInput
-                placeholder={"Nombre o forma de identificarlo "}
-              ></TextInput>
 
-              <Paragraph>¿Que se necesita?</Paragraph>
-              <TextInput placeholder={"Ej: Zapatos, Ropa, Agua"}></TextInput>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button title={"Publicar"} onPress={_hideDialog}></Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
+        <FAB style={styles.fab} icon="plus" onPress={toggleFab} />
+        <MarkerDetailDialog
+          isVisible={showDetail}
+          toggle={showDetailToggle}
+          markerDetails={markerDetails}
+        />
+        <AddMarkerDialog isVisible={isVisible} toggle={toggleFab} />
       </View>
     </PaperProvider>
   );
@@ -129,3 +120,12 @@ const styles = StyleSheet.create({
     bottom: 0
   }
 });
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: "#2196f3",
+    accent: "#1de9b6"
+  }
+};

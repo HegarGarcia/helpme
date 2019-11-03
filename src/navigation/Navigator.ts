@@ -4,8 +4,6 @@ import { createStackNavigator } from "react-navigation-stack";
 import SignInScreen from "../screens/authentication/SignIn";
 import SignUpScreen from "../screens/authentication/SignUp";
 
-import ProfileScreen from "../screens/profile/ProfileScreen";
-
 const AuthStack = createStackNavigator(
   {
     SignIn: SignInScreen,
@@ -14,10 +12,7 @@ const AuthStack = createStackNavigator(
   { headerMode: "none" }
 );
 
-const AppStack = createStackNavigator(
-  { ProfileScreen },
-  { headerMode: "none" }
-);
+const AppStack = createStackNavigator({}, { headerMode: "none" });
 
 export const AuthNavigator = createAppContainer(
   createSwitchNavigator(

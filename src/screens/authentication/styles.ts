@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Colors, FontSize } from "../../styles/base";
+import { Spacing } from "../../styles/base";
 
 const styles = StyleSheet.create({
   container: {
@@ -8,10 +8,13 @@ const styles = StyleSheet.create({
     padding: 30
   },
   title: {
-    textAlign: "center",
-    fontSize: FontSize.lg,
-    color: Colors.white,
-    fontWeight: "600"
+    textAlign: "center"
+  },
+  textInput: {
+    marginVertical: Spacing.sm
+  },
+  actionButton: {
+    marginVertical: Spacing.sm
   }
 });
 

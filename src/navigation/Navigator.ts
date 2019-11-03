@@ -3,9 +3,8 @@ import { createStackNavigator } from "react-navigation-stack";
 
 import SignInScreen from "../screens/authentication/SignInScreen";
 import SignUpScreen from "../screens/authentication/SignUpScreen";
-
+import MapScreen from "../screens/MapScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import MapScreen from "../screens/MapScreen/MapScreen";
 
 const AuthStack = createStackNavigator(
   {
@@ -15,10 +14,10 @@ const AuthStack = createStackNavigator(
   { headerMode: "none" }
 );
 
-const AppStack = createStackNavigator(
+export const AppStack = createStackNavigator(
   {
-    Profile: ProfileScreen,
-    Map: MapScreen
+    Map: MapScreen,
+    Profile: ProfileScreen
   },
   { headerMode: "none" }
 );

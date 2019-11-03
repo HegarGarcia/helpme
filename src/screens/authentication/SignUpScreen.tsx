@@ -1,15 +1,9 @@
 import React, { FC, useState } from "react";
-import { Text, ImageBackground } from "react-native";
+import { View } from "react-native";
+import { Button, TextInput, Title } from "react-native-paper";
 
 import { signUpWithEmailAndPassword } from "../../authentication/authenticateWithEmailAndPassword";
-
-import Button from "../../components/Button";
-import TextInput from "../../components/TextInput";
-
-import { Colors } from "../../styles/base";
 import styles from "./styles";
-
-const BackgroundImage = require("../../../assets/images/help_hands.jpg");
 
 const SignUpScreen: FC<any> = props => {
   const [email, setEmail] = useState("");
@@ -17,34 +11,51 @@ const SignUpScreen: FC<any> = props => {
   const [username, setUsername] = useState("");
 
   return (
-    <ImageBackground
-      style={styles.container}
-      blurRadius={8}
-      source={BackgroundImage}>
-      <Text style={styles.title}>Registro</Text>
+    <View style={styles.container}>
+      <Title style={styles.title}>Registro</Title>
 
-      <TextInput onChangeText={setUsername} placeholder='Nombre de Usuario' />
-      <TextInput onChangeText={setEmail} placeholder='Email' />
       <TextInput
+        autoCompleteType='name'
+        mode='outlined'
+        style={styles.textInput}
+        value={username}
+        onChangeText={setUsername}
+        label='Nombre de Usuario'
+      />
+      <TextInput
+        autoCompleteType='email'
+        mode='outlined'
+        style={styles.textInput}
+        value={email}
+        onChangeText={setEmail}
+        label='Email'
+      />
+      <TextInput
+        autoCompleteType='off'
+        mode='outlined'
         secureTextEntry={true}
+        style={styles.textInput}
+        value={password}
         onChangeText={setPassword}
-        placeholder='Contraseña'
+        label='Contraseña'
       />
 
       <Button
-        title='Registrarme'
-        style={{ backgroundColor: Colors.secondaryLigth }}
+        mode='contained'
+        style={styles.textInput}
         onPress={() =>
           signUpWithEmailAndPassword({ email, password, username })
-        }
-      />
+        }>
+        Registrarme
+      </Button>
 
       <Button
-        title='Iniciar sesión'
-        style={{ backgroundColor: Colors.secondaryLigth }}
-        onPress={() => props.navigation.navigate("SignIn")}
-      />
-    </ImageBackground>
+        mode='contained'
+        style={styles.textInput}
+        onPress={() => props.navigation.navigate("SignIn")}>
+        Iniciar sesión
+      </Button>
+    </View>
   );
 };
 
